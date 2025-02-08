@@ -11,3 +11,4 @@ class Program(Base):
     duration_years = Column(Integer)
     
     courses = relationship("Course", back_populates="program")
+    categories = relationship("Category", secondary="program_categories", back_populates="programs")

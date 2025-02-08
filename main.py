@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from config.database import engine, Base
-from webapi import course_routes, program_routes, student_routes, professor_routes
+from webapi import course_routes, program_routes, student_routes, professor_routes, category_routes
 
 app = FastAPI()
 
@@ -12,6 +12,7 @@ app.include_router(course_routes.router)
 app.include_router(program_routes.router)
 app.include_router(student_routes.router)
 app.include_router(professor_routes.router)
+app.include_router(category_routes.router)
 
 # @app.get("/")
 # def home(request: Request) -> dict[str, str]:
