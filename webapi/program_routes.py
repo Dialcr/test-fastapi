@@ -10,12 +10,16 @@ program_service = ProgramService()
 
 @router.post("/", response_model=ProgramResponse)
 def create_program(program: ProgramCreate, db: Session = Depends(get_db)):
-    return program_service.create_program(
+    resutl =program_service.create_program(
         db=db,
         name=program.name,
         description=program.description,
-        duration_years=program.duration_years
+        duration_years=program.duration_years,
+        category_ids=program.category_ids,
+        program_type_id=program.program_type_id
     )
+    return resutl 
+        
 @router.get("/{program_id}", response_model=ProgramResponse)
 def get_program(program_id: int, db: Session = Depends(get_db)):
     program = program_service.get_program(db, program_id)
@@ -24,8 +28,13 @@ def get_program(program_id: int, db: Session = Depends(get_db)):
     return program
 
 @router.get("/", response_model=List[ProgramResponse])
-def get_programs(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    return program_service.get_programs(db, skip, limit)
+def get_programs(skip: int = 0, limit: int = 100,category_id: int = 0,popular: bool = False, db: Session = Depends(get_db)):
+    return program_service.get_programs(db, skip, limit, popular=popular, category_id=category_id)
+
+# @router.get("/categories/{category_id}", response_model=List[ProgramResponse])
+# def get_programs_by_category(skip: int = 0, limit: int = 100, category_id: int = 0, db: Session = Depends(get_db)):
+#     return program_service.get_programs_by_category(db, skip, limit, category_id)
+
 
 @router.put("/{program_id}", response_model=ProgramResponse)
 def update_program(program_id: int, program: ProgramUpdate, db: Session = Depends(get_db)):

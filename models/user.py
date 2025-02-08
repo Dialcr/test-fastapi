@@ -1,6 +1,8 @@
 from sqlalchemy import Column, Integer, String, DateTime
 from config.database import Base
 from datetime import datetime
+from sqlalchemy.orm import relationship
+
 
 class User(Base):
     __tablename__ = "users"
@@ -12,3 +14,6 @@ class User(Base):
     last_name = Column(String(100))
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    qualifications = relationship("Qualification", back_populates="user")
+

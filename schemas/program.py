@@ -1,5 +1,7 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import List, Optional
+from schemas.category import CategoryResponse
+from schemas.program_type import ProgramTypeResponse
 
 class ProgramBase(BaseModel):
     name: str
@@ -7,6 +9,8 @@ class ProgramBase(BaseModel):
     duration_years: int
 
 class ProgramCreate(ProgramBase):
+    category_ids: List[int] = []
+    program_type_id: int 
     pass
 
 class ProgramUpdate(BaseModel):
@@ -15,6 +19,10 @@ class ProgramUpdate(BaseModel):
     duration_years: Optional[int] = None
 
 class ProgramResponse(ProgramBase):
+    categories: list[CategoryResponse] = []
+    program_type: ProgramTypeResponse
+    avg_stars: float = 0
+    total_enrollments: int = 0
     id: int
 
     class Config:
