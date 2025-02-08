@@ -1,5 +1,5 @@
 
-from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy import Column, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 from .user import Base
 
@@ -8,7 +8,7 @@ class Professor(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
-    department = Column(str(100))
+    department = Column(String(100))
     
     user = relationship("User")
     subjects = relationship("Subject", back_populates="professor")
