@@ -13,10 +13,10 @@ course_service = CourseService()
 def create_course(course: CourseCreate, db: Session = Depends(get_db)):
     return course_service.create_course(
         db=db,
-        program_id=course.program_id,
         name=course.name,
         enrollment_start=course.enrollment_start,
-        enrollment_end=course.enrollment_end
+        enrollment_end=course.enrollment_end,
+        subjects=course.subjects
     )
 
 @router.get("/{course_id}", response_model=CourseResponse)

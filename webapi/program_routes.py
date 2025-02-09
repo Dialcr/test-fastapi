@@ -10,15 +10,16 @@ program_service = ProgramService()
 
 @router.post("/", response_model=ProgramResponse)
 def create_program(program: ProgramCreate, db: Session = Depends(get_db)):
-    resutl =program_service.create_program(
+    result =program_service.create_program(
         db=db,
         name=program.name,
         description=program.description,
         duration_years=program.duration_years,
         category_ids=program.category_ids,
-        program_type_id=program.program_type_id
+        program_type_id=program.program_type_id,
+        courses_ids=program.courses_ids
     )
-    return resutl 
+    return result 
         
 @router.get("/{program_id}", response_model=ProgramResponse)
 def get_program(program_id: int, db: Session = Depends(get_db)):

@@ -4,7 +4,7 @@ from typing import Optional
 class QualificationBase(BaseModel):
     stars: int
     review: str
-    user_is: int
+    user_id: int
     program_id: int
 
 class QualificationCreate(QualificationBase):
@@ -13,7 +13,7 @@ class QualificationCreate(QualificationBase):
 class QualificationUpdate(BaseModel):
     stars: Optional[int] = None
     review: Optional[str] = None
-    user_is: Optional[int] = None
+    user_id: Optional[int] = None
     program_id: Optional[int] = None
 
 class QualificationResponse(QualificationBase):

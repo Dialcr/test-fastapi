@@ -1,5 +1,7 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from models.professor import Professor
+from models.subject import Subject
 from models.user import User
 from typing import List, Optional
 
@@ -7,15 +9,24 @@ from schemas.professor import ProfessorResponse
 
 class ProfessorService:
     def create_professor(self, db: Session, email: str, password: str, first_name: str, 
-                        last_name: str, department: str, description: str) -> Professor:
+                        last_name: str, department: str, description: str, subject_id: int) -> Professor:
+        
         user = db.query(User).filter(User.email == email).first()
         if user is not None:
-            raise Exception("User with that email  already exists")
+            raise HTTPException(status_code=400, detail="User with that email  already exists")
+        
+        subject = db.query(Subject).filter(Subject.id == subject_id).first()
+        if subject is None:
+            raise HTTPException(status_code=400, detail="Subject not found")
+
+        
         user = User(
             email=email,
             password=password,  # todo hash the password
             first_name=first_name,
             last_name=last_name,
+            subject_id=subject.id,
+            subject=subject
         )
         db.add(user)
         db.flush()

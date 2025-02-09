@@ -16,7 +16,7 @@ from schemas.program_type import ProgramTypeResponse
 
 
 class ProgramService:
-    def create_program(self, db: Session, name: str, description: str, duration_years: int, program_type_id: int, category_ids: List[int] = []) -> Program:
+    def create_program(self, db: Session, name: str, description: str, duration_years: int, program_type_id: int, category_ids: List[int] = [], courses_ids: List[int] = []) -> Program:
         existing_program = db.query(Program).filter(Program.name == name).first()
         if existing_program is not None:
             raise HTTPException(status_code=400, detail="Program with the same name already exists")
@@ -28,6 +28,9 @@ class ProgramService:
         program_type = db.query(Program_type).filter(Program_type.id == program_type_id).first()
         if program_type is None:
             raise HTTPException(status_code=400, detail="Program type not found")
+        courses = db.query(Course).filter(Course.id.in_(courses_ids)).all()
+        if len(courses) != len(courses_ids):
+            raise HTTPException(status_code=400, detail="One or more courses not found")
         
         program = Program(
             name=name,
@@ -35,7 +38,8 @@ class ProgramService:
             duration_years=duration_years,
             categories=categories,
             program_type_id=program_type.id,
-            program_type=program_type
+            program_type=program_type,
+            courses=courses
         )
         db.add(program)
         db.commit()
@@ -80,7 +84,7 @@ class ProgramService:
             for program, avg_stars, total_enrollments in programs
         ]
         if popular:
-            programs_response = sorted(programs_response, key=lambda x: x.total_enrollments, reverse=True)
+            programs_response = sorted(programs_response, key=lambda x: x.avg_stars, reverse=True)
         return programs_response
 
     def get_programs_by_category(self, db: Session, skip: int = 0, limit: int = 100, category_id: int = 0) -> List[Program]:

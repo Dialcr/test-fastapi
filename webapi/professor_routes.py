@@ -17,7 +17,8 @@ def create_professor(professor: ProfessorCreate, db: Session = Depends(get_db)):
         first_name=professor.first_name,
         last_name=professor.last_name,
         department=professor.department,
-        description=professor.description
+        description=professor.description,
+        subject_id=professor.subject_id
     )
 
 @router.get("/{professor_id}", response_model=ProfessorResponse)

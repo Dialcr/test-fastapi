@@ -11,6 +11,7 @@ class ProfessorBase(BaseModel):
 
 class ProfessorCreate(ProfessorBase):
     password: str
+    subject_id: int
 
 class ProfessorUpdate(BaseModel):
     email: Optional[EmailStr] = None

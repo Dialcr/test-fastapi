@@ -14,7 +14,7 @@ def create_qualification(qualification: QualificationCreate, db: Session = Depen
         db=db,
         stars=qualification.stars,
         review=qualification.review,
-        user_id=qualification.user_is,
+        user_id=qualification.user_id,
         program_id=qualification.program_id
     )
 

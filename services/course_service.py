@@ -1,15 +1,32 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from models.course import Course
 from typing import List, Optional
 from datetime import datetime
 
+from models.subject import Subject
+from schemas.subject import SubjectBase
+
 class CourseService:
-    def create_course(self, db: Session, program_id: int, name: str, enrollment_start: datetime, enrollment_end: datetime) -> Course:
+    def create_course(self, db: Session, name: str, enrollment_start: datetime, enrollment_end: datetime, subjects: List[SubjectBase]) -> Course:
+
+        created_subjects = []
+        for subject_data in subjects:
+            if subject_data.semester <= 0:
+                raise HTTPException(status_code=400, detail="Semester must be greater than 0")
+            subject = Subject(
+                name=subject_data.name,
+                description=subject_data.description,
+                semester=subject_data.semester
+            )
+            db.add(subject)
+            created_subjects.append(subject)
+
         course = Course(
-            program_id=program_id,
             name=name,
             enrollment_start=enrollment_start,
-            enrollment_end=enrollment_end
+            enrollment_end=enrollment_end,
+            subjects=created_subjects
         )
         db.add(course)
         db.commit()

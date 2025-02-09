@@ -10,6 +10,7 @@ class ProgramBase(BaseModel):
 
 class ProgramCreate(ProgramBase):
     category_ids: List[int] = []
+    courses_ids: List[int] = []
     program_type_id: int 
     pass
 

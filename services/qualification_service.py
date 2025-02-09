@@ -8,7 +8,7 @@ from fastapi import HTTPException
 
 class QualificationService:
     def create_qualification(self, db: Session, review: str, user_id: int, program_id: int, stars: int = 1) -> Qualification:
-        user =  db.query(User).filter(user.id == user_id).first()
+        user =  db.query(User).filter(User.id == user_id).first()
         if user is None:
             raise HTTPException(status_code=400, detail="User not found")
 
