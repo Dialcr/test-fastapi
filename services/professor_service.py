@@ -25,8 +25,6 @@ class ProfessorService:
             password=password,  # todo hash the password
             first_name=first_name,
             last_name=last_name,
-            subject_id=subject.id,
-            subject=subject
         )
         db.add(user)
         db.flush()
@@ -35,8 +33,9 @@ class ProfessorService:
             user_id=user.id,
             department=department,
             description=description,
-            user =user
-
+            user =user,
+            subject_id=subject.id,
+            subject=subject
         )
         db.add(professor)
         db.commit()
