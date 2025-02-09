@@ -1,11 +1,13 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
 
 class ProfessorBase(BaseModel):
-    email: EmailStr
-    first_name: str
-    last_name: str
+    # email: EmailStr
+    email: EmailStr = Field(alias='user.email')
+    first_name: str = Field(alias='user.first_name')
+    last_name: str = Field(alias='user.last_name')
     department: str
+    description: str
 
 class ProfessorCreate(ProfessorBase):
     password: str
@@ -21,3 +23,4 @@ class ProfessorResponse(ProfessorBase):
 
     class Config:
         from_attributes = True
+        populate_by_name = True
