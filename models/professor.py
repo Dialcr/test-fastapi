@@ -10,6 +10,7 @@ class Professor(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     department = Column(String(100))
     description = Column(String(500))
-    
+    subject_id = Column(Integer, ForeignKey("subjects.id"))
+
     user = relationship("User")
-    subjects = relationship("Subject", back_populates="professor")
+    subject = relationship("Subject", back_populates="professors")
