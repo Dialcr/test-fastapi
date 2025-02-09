@@ -1,11 +1,7 @@
-import os
-from typing import Dict
-from fastapi import FastAPI, HTTPException, Request
-import redis
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from config.database import engine, Base
-from webapi import course_routes, program_routes, student_routes, professor_routes, category_routes, qualification_routes, program_type_routes, promo_routes
-# from webapi import *
+from webapi import course_routes, program_routes, student_routes, professor_routes, category_routes, qualification_routes, program_type_routes, promo_routes, enrollment_routes
 from dotenv import load_dotenv
 
 
@@ -35,4 +31,6 @@ app.include_router(category_routes)
 app.include_router(qualification_routes)
 app.include_router(program_type_routes)
 app.include_router(promo_routes)
+app.include_router(enrollment_routes)
+
 

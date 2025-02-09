@@ -1,11 +1,23 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from models.student import Student
 from models.user import User
 from typing import List, Optional
 
+from schemas.student import StudentResponse
+
 class StudentService:
     def create_student(self, db: Session, email: str, password: str, first_name: str, 
                       last_name: str, student_id: str) -> Student:
+
+        user = db.query(User).filter(User.email == email).first()
+        if user is not None:
+            raise HTTPException(status_code=400, detail="User with that email  already exists")
+        
+        student = db.query(Student).filter(Student.student_id == student_id).first()
+        if student is not None:
+            raise HTTPException(status_code=400, detail="Student with that identifier already exists")
+        
         user = User(
             email=email,
             password=password,  # Remember to hash the password in production
@@ -17,12 +29,20 @@ class StudentService:
 
         student = Student(
             user_id=user.id,
-            student_id=student_id
+            student_id=student_id,
+            user=user
         )
         db.add(student)
         db.commit()
         db.refresh(student)
-        return student
+        # return student
+        return StudentResponse(
+            id=student.id,
+            email=student.user.email,
+            first_name=student.user.first_name,
+            last_name=student.user.last_name,
+            student_id=student.student_id
+        )
 
     def get_student(self, db: Session, student_id: int) -> Optional[Student]:
         return db.query(Student).filter(Student.id == student_id).first()

@@ -7,7 +7,7 @@ from models.qualification import Qualification
 from models.enrollment import Enrollment
 from models.course import Course
 from typing import List, Optional
-from sqlalchemy import func
+from sqlalchemy import distinct, func
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import or_
 from schemas.category import CategoryResponse
@@ -53,7 +53,7 @@ class ProgramService:
         programs = db.query(
             Program,
             func.avg(Qualification.stars).label('avg_stars'),
-            func.count(Enrollment.id).label('total_enrollments')
+            func.count(distinct(Enrollment.id)).label('total_enrollments')
         ).outerjoin(
             Qualification, Qualification.program_id == Program.id
         ).outerjoin(
