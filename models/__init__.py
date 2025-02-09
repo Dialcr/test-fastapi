@@ -9,6 +9,7 @@ from models.review import Review
 from models.category import Category, program_categories
 from models.program_type import Program_type
 from models.qualification import Qualification
+from models.promo import Promo
 
 __all__ = [
     'Base',
@@ -24,4 +25,5 @@ __all__ = [
     'Program_type',
     'Qualification',
     'program_courses',
+    'Promo',
 ]
