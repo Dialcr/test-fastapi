@@ -3,9 +3,9 @@ from typing import Optional
 
 class ProfessorBase(BaseModel):
     # email: EmailStr
-    email: EmailStr = Field(alias='user.email')
-    first_name: str = Field(alias='user.first_name')
-    last_name: str = Field(alias='user.last_name')
+    email: EmailStr 
+    first_name: str  
+    last_name: str 
     department: str
     description: str
 

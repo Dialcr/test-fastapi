@@ -44,11 +44,34 @@ class StudentService:
             student_id=student.student_id
         )
 
-    def get_student(self, db: Session, student_id: int) -> Optional[Student]:
-        return db.query(Student).filter(Student.id == student_id).first()
+    def get_student(self, db: Session, student_id: int) -> Optional[StudentResponse]:
+        student = db.query(Student).filter(Student.id == student_id).first()
+        if student:
+            return StudentResponse(
+                id=student.id,
+                email=student.user.email,
+                first_name=student.user.first_name,
+                last_name=student.user.last_name,
+                student_id=student.student_id
+            )
+        return None
 
-    def get_students(self, db: Session, skip: int = 0, limit: int = 100) -> List[Student]:
-        return db.query(Student).offset(skip).limit(limit).all()
+    def get_students(self, db: Session, skip: int = 0, limit: int = 100) -> List[StudentResponse]:
+        students = db.query(Student).outerjoin(
+            Student.user
+        ).offset(skip).limit(limit).all()
+
+        return [
+            StudentResponse(
+                id=student.id,
+                email=student.user.email,
+                first_name=student.user.first_name,
+                last_name=student.user.last_name,
+                student_id=student.student_id
+            ) for student in students
+        ]
+
+
 
     def update_student(self, db: Session, student_id: int, student_data: dict) -> Optional[Student]:
         student = self.get_student(db, student_id)

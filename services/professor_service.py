@@ -52,7 +52,10 @@ class ProfessorService:
 
 
     def get_professor(self, db: Session, professor_id: int) -> Optional[Professor]:
-        return db.query(Professor).filter(Professor.id == professor_id).first()
+        return db.query(Professor).filter(Professor.id == professor_id
+        ).outerjoin(
+                Professor.user
+            ).first()
 
     def get_professors(self, db: Session, skip: int = 0, limit: int = 100) -> List[Professor]:
         professors = db.query(Professor).outerjoin(
